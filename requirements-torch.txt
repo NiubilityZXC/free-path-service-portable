@@ -1,0 +1,4 @@
+# Optional: pulse deep-learning retraining and historical MLP experiments.
+# The validated source environment used torch 2.12.1+cu130. Public-index
+# installers may resolve a CPU or platform-specific build of the same version.
+torch==2.12.1

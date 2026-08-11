@@ -1,0 +1,11 @@
+.venv
+.git
+**/.git
+**/__pycache__
+**/*.pyc
+runtime/*.pid
+runtime/logs/*
+**/node_modules
+**/catboost_info
+FLASH4.8
+archive_zpinch10000

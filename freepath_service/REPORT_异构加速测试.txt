@@ -1,0 +1,65 @@
+Rosseland_opa_new 异构加速测试报告
+
+修改原则：
+1. 不修改 SNOP、abs_coe4、三温 Rosseland 权重、Vegas 积分方法和收敛参数的物理含义。
+2. 只修改 integrand 的批量执行方式和 Cuba 并行调度。
+3. CPU worker 继续调用原 Fortran abs_coe4。
+4. GPU worker 使用 CUDA 按同一公式批量计算 integrand。
+
+主要修改：
+1. SNOP_op_Ross3.F 引入 gpu_bridge，并把 nvec 从 1 改为 1000000。
+2. nbatch 从 1000000 改为 2000000，降低 128 核并行下的小批通信开销。
+3. 新增 gpu_bridge.f90 和 gpu_integrand.cu。
+4. cubapar.f90 增加 Cuba GPU accelerator 设置。
+5. makefile 改为使用压缩包内 ../Cuba-4.2.2，并加入 CUDA 链接。
+
+测试机器：
+CPU：128 个在线逻辑 CPU
+GPU：2 x NVIDIA GeForce RTX 5090
+测试 GPU：CUDA_VISIBLE_DEVICES=0,1
+
+前三组参数：
+rod   = 600.000098000000
+tep   = 4000.029400000000
+tgama = 600.009800000000, 1200.009600000000, 1800.009400000000
+
+原版结果：
+data.txt:
+600.000098000000   4000.029400000000   600.009800000000   0.000006668470
+600.000098000000   4000.029400000000   1200.009600000000   0.000009011642
+600.000098000000   4000.029400000000   1800.009400000000   0.000009838064
+neval = 45000000
+integral = 0.004001082669
+error = 0.000000170598
+elapsed = 60.79 s
+
+单 GPU+CPU 异构版结果：
+data.txt:
+600.000098000000   4000.029400000000   600.009800000000   0.000006668470
+600.000098000000   4000.029400000000   1200.009600000000   0.000009011642
+600.000098000000   4000.029400000000   1800.009400000000   0.000009838064
+neval = 45000000
+integral = 0.004001082669
+error = 0.000000170598
+elapsed = 13.22 s
+
+双 GPU 最快模式第一组结果：
+命令使用 CUBACORES=0, ROSS_CUBAACCELS=2, ROSS_CUBAACCELMAX=1000000
+日志确认：using 0 cores 2 accelerators via shared memory
+data.txt 第一行与原版第一行字节级一致
+elapsed = 2.55 s
+
+一致性：
+前三组 data.txt 与原版字节级一致。
+前三组输出数值差为 0。
+
+速度：
+前三组单 GPU+CPU 异构版相比原版加速约 4.60 倍。
+单独第一组测试中，原版 21.89 s，单 GPU+CPU 异构版 4.34 s，加速约 5.04 倍。
+双 GPU 最快模式第一组 2.55 s，相比原版第一组加速约 8.58 倍。
+
+资源使用：
+Cuba 双 GPU 最快日志显示 using 0 cores 2 accelerators via shared memory。
+如果必须让 CPU 也参与，可去掉 CUBACORES=0 并设置 ROSS_CUBAACCELMAX=950000；
+测试中该模式约 2.72 s，慢于纯双 GPU 最快模式。
+原因是两张 GPU 已能吃满每批 2000000 个采样点，CPU worker 参与会引入批次等待和调度开销。

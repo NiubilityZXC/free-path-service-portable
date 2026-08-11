@@ -1,0 +1,12 @@
+{
+  "name": "pulse-capacitor-online-eval",
+  "private": true,
+  "scripts": {
+    "test:backend": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=${XDG_RUNTIME_DIR:-/tmp} python3 -m unittest discover -s tests -v",
+    "test:ui": "TMPDIR=${XDG_RUNTIME_DIR:-/tmp} playwright test",
+    "test:all": "npm run test:backend && npm run test:ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "created_at": "2026-07-06 11:50:17",
+  "rule": {
+    "Be_Al": "kept from previous permanent benchmark files",
+    "Au": "rebuilt per source with contiguous low/high rod extrapolation and stable random holdout",
+    "benchmark_ratio": 0.1,
+    "extrapolation_ratio_per_side_rod_axis": 0.1
+  },
+  "inputs": {
+    "old_au_standard": "/home/user/Rosseland_opa_new_hetero/equally/free_path_model_outputs/unified_standard_training_data.bak_20260702_170959.txt",
+    "au2_raw": "/home/user/Rosseland_opa_new_hetero/equally/data_Au2.txt",
+    "old_au_rows": 124913,
+    "au2_positive_rows": 117603
+  },
+  "random_benchmark": {
+    "total": 39708,
+    "by_element": {
+      "Z_13": 9959,
+      "Z_4": 10034,
+      "Z_79": 19715
+    },
+    "by_source": {
+      "Au2_data_Au2.txt": 9518,
+      "Au_old_data.txt": 10197,
+      "Z_13": 9959,
+      "Z_4": 10034
+    }
+  },
+  "extrapolation_benchmark": {
+    "total": 96889,
+    "by_element": {
+      "Z_13": 25000,
+      "Z_4": 25000,
+      "Z_79": 46889
+    },
+    "by_source": {
+      "Au2_data_Au2.txt": 21914,
+      "Au_old_data.txt": 24975,
+      "Z_13": 25000,
+      "Z_4": 25000
+    }
+  },
+  "backup_suffix": "bak_source_au_20260706_115015"
+}

@@ -1,0 +1,6 @@
+-r requirements-runtime.txt
+catboost==1.2.10
+pandas==3.0.1
+openpyxl==3.1.5
+xgboost==3.2.0
+lightgbm==4.6.0

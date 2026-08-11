@@ -1,0 +1,326 @@
+{
+  "xlsx_path": "/home/user/zpinch_package_20260306/零维表格转换 (2).xlsx",
+  "source_sheet": "对应优化质量",
+  "target_sheet": "丝阵质量20_30_40mgcm",
+  "source_n_samples": 2736,
+  "target_n_samples": 8208,
+  "combined_n_samples": 10944,
+  "repaired_source_velocity_rows": 0,
+  "repaired_target_velocity_rows": 0,
+  "source_quality": {
+    "n_samples": 2736,
+    "missing_count": 0,
+    "duplicate_count": 0,
+    "physics_v_backcalc_mae": 1343.5028122362642,
+    "physics_v_backcalc_mape_percent": 0.0010290743605478104
+  },
+  "target_quality": {
+    "n_samples": 8208,
+    "missing_count": 0,
+    "duplicate_count": 0,
+    "physics_v_backcalc_mae": 333.8619435125278,
+    "physics_v_backcalc_mape_percent": 0.0010146270921124296
+  },
+  "combined_quality": {
+    "n_samples": 10944,
+    "missing_count": 0,
+    "duplicate_count": 4,
+    "physics_v_backcalc_mae": 586.2721606934618,
+    "physics_v_backcalc_mape_percent": 0.0010182389092212745
+  },
+  "available_models": [
+    "CatBoost",
+    "LightGBM",
+    "RandomForest",
+    "XGBoost"
+  ],
+  "feature_names": [
+    "I_MA",
+    "tr_ns",
+    "liner_r_cm",
+    "foam_r_cm",
+    "m_mg_per_cm",
+    "Z_atomic_number",
+    "ratio_foam_liner",
+    "gap_r_cm",
+    "area_diff_cm2",
+    "drive_proxy_I_over_tr",
+    "I_mul_liner",
+    "I_mul_foam",
+    "tr_mul_liner",
+    "tr_mul_foam"
+  ],
+  "combined_random_split_summary": {
+    "RandomForest": {
+      "E_MAE": 0.11636498371880703,
+      "E_RMSE": 0.20848212690950083,
+      "E_MAPE_percent": 7.134708598357652,
+      "v_MAE": 1048144.1319773226,
+      "v_MAPE_percent": 3.3113017144333328
+    },
+    "LightGBM": {
+      "E_MAE": 0.1175640387588179,
+      "E_RMSE": 0.21270562812426397,
+      "E_MAPE_percent": 7.946685038277578,
+      "v_MAE": 1181757.1355226391,
+      "v_MAPE_percent": 3.7264098391157003
+    },
+    "XGBoost": {
+      "E_MAE": 0.1242634781817968,
+      "E_RMSE": 0.22659437696654325,
+      "E_MAPE_percent": 8.392193028975887,
+      "v_MAE": 1270170.593379642,
+      "v_MAPE_percent": 3.91803116932431
+    },
+    "CatBoost": {
+      "E_MAE": 0.16154800427159577,
+      "E_RMSE": 0.28109752779180314,
+      "E_MAPE_percent": 10.763875514602576,
+      "v_MAE": 1603637.8536342124,
+      "v_MAPE_percent": 5.026445479244521
+    }
+  },
+  "combined_random_split_source_only_summary": {
+    "RandomForest": {
+      "E_MAE": 0.021079199978301818,
+      "E_RMSE": 0.04885258663195482,
+      "E_MAPE_percent": 0.34887492882573695,
+      "v_MAE": 145811.18782397307,
+      "v_MAPE_percent": 0.17530555481669655
+    },
+    "LightGBM": {
+      "E_MAE": 0.04337181027789808,
+      "E_RMSE": 0.056518638340773975,
+      "E_MAPE_percent": 0.8897294729460125,
+      "v_MAE": 510097.00565209525,
+      "v_MAPE_percent": 0.44495568467799135
+    },
+    "XGBoost": {
+      "E_MAE": 0.044826579726230886,
+      "E_RMSE": 0.06342519498485538,
+      "E_MAPE_percent": 0.8971432979389995,
+      "v_MAE": 597202.3425635231,
+      "v_MAPE_percent": 0.4486268612650244
+    },
+    "CatBoost": {
+      "E_MAE": 0.05378135641895246,
+      "E_RMSE": 0.07210860798685609,
+      "E_MAPE_percent": 1.0832016497295147,
+      "v_MAE": 626694.9519395875,
+      "v_MAPE_percent": 0.541020027149779
+    }
+  },
+  "combined_random_split_target_only_summary": {
+    "RandomForest": {
+      "E_MAE": 0.14841741996327693,
+      "E_RMSE": 0.2393069728343945,
+      "E_MAPE_percent": 9.419413776276542,
+      "v_MAE": 1351880.6987102262,
+      "v_MAPE_percent": 4.36707213283147
+    },
+    "LightGBM": {
+      "E_MAE": 0.1425474773492226,
+      "E_RMSE": 0.24371895238268113,
+      "E_MAPE_percent": 10.322889891479774,
+      "v_MAE": 1407934.1005662533,
+      "v_MAPE_percent": 4.831353505168029
+    },
+    "XGBoost": {
+      "E_MAE": 0.15099402517616653,
+      "E_RMSE": 0.259344384153204,
+      "E_MAPE_percent": 10.915664528507842,
+      "v_MAE": 1496430.0234519069,
+      "v_MAPE_percent": 5.086321660682544
+    },
+    "CatBoost": {
+      "E_MAE": 0.19780878615820474,
+      "E_RMSE": 0.32226018113261157,
+      "E_MAPE_percent": 14.021558306524817,
+      "v_MAE": 1932362.3974016572,
+      "v_MAPE_percent": 6.535777587575414
+    }
+  },
+  "combined_mass_holdout_summary": {
+    "RandomForest": {
+      "avg_over_masses": {
+        "E_MAE": 1.0109963859886955,
+        "E_RMSE": 1.3927692714609445,
+        "E_MAPE_percent": 73.9186048522777,
+        "v_MAE": 8676625.88507977,
+        "v_MAPE_percent": 26.707290004045365
+      },
+      "by_mass": [
+        {
+          "E_MAE": 1.5905853968224988,
+          "E_RMSE": 2.3271662809225555,
+          "E_MAPE_percent": 139.98715988150815,
+          "v_MAE": 14371589.212182907,
+          "v_MAPE_percent": 42.36784161117287,
+          "heldout_mass": 20.0
+        },
+        {
+          "E_MAE": 0.7759908828096453,
+          "E_RMSE": 1.0019796570652104,
+          "E_MAPE_percent": 43.65449558714774,
+          "v_MAE": 6547355.02697778,
+          "v_MAPE_percent": 19.76148014595722,
+          "heldout_mass": 30.0
+        },
+        {
+          "E_MAE": 0.6664128783339421,
+          "E_RMSE": 0.8491618763950671,
+          "E_MAPE_percent": 38.114159088177196,
+          "v_MAE": 5110933.4160786215,
+          "v_MAPE_percent": 17.992548255006007,
+          "heldout_mass": 40.0
+        }
+      ]
+    },
+    "LightGBM": {
+      "avg_over_masses": {
+        "E_MAE": 0.9140595928435221,
+        "E_RMSE": 1.2654171983842466,
+        "E_MAPE_percent": 68.97662099199141,
+        "v_MAE": 7965104.127191313,
+        "v_MAPE_percent": 25.2351329525043
+      },
+      "by_mass": [
+        {
+          "E_MAE": 1.3451387253430298,
+          "E_RMSE": 2.0115237001379844,
+          "E_MAPE_percent": 123.7983384217905,
+          "v_MAE": 12610567.95947824,
+          "v_MAPE_percent": 37.99063108504558,
+          "heldout_mass": 20.0
+        },
+        {
+          "E_MAE": 0.6842927043759913,
+          "E_RMSE": 0.9030262080463688,
+          "E_MAPE_percent": 40.29074651449624,
+          "v_MAE": 5865652.729779747,
+          "v_MAPE_percent": 18.146044262438444,
+          "heldout_mass": 30.0
+        },
+        {
+          "E_MAE": 0.7127473488115451,
+          "E_RMSE": 0.8817016869683868,
+          "E_MAPE_percent": 42.84077803968747,
+          "v_MAE": 5419091.692315952,
+          "v_MAPE_percent": 19.568723510028878,
+          "heldout_mass": 40.0
+        }
+      ]
+    },
+    "XGBoost": {
+      "avg_over_masses": {
+        "E_MAE": 0.8182554391305977,
+        "E_RMSE": 1.1655435299187344,
+        "E_MAPE_percent": 63.76114312213161,
+        "v_MAE": 7192080.60595934,
+        "v_MAPE_percent": 22.98339358667295
+      },
+      "by_mass": [
+        {
+          "E_MAE": 1.311633264717314,
+          "E_RMSE": 1.980069150034759,
+          "E_MAPE_percent": 121.47170611999938,
+          "v_MAE": 12338809.046957172,
+          "v_MAPE_percent": 37.286437237477465,
+          "heldout_mass": 20.0
+        },
+        {
+          "E_MAE": 0.46273872295845847,
+          "E_RMSE": 0.6584264394592468,
+          "E_MAPE_percent": 30.205280212734074,
+          "v_MAE": 4059417.1849366385,
+          "v_MAPE_percent": 13.298029076932746,
+          "heldout_mass": 30.0
+        },
+        {
+          "E_MAE": 0.6803943297160208,
+          "E_RMSE": 0.8581350002621977,
+          "E_MAPE_percent": 39.60644303366136,
+          "v_MAE": 5178015.585984208,
+          "v_MAPE_percent": 18.36571444560865,
+          "heldout_mass": 40.0
+        }
+      ]
+    },
+    "CatBoost": {
+      "avg_over_masses": {
+        "E_MAE": 0.8147726961710638,
+        "E_RMSE": 1.1481384834387816,
+        "E_MAPE_percent": 67.20526233033567,
+        "v_MAE": 7333858.235833998,
+        "v_MAPE_percent": 24.223623880438552
+      },
+      "by_mass": [
+        {
+          "E_MAE": 1.290465491032836,
+          "E_RMSE": 1.9826580328960013,
+          "E_MAPE_percent": 121.89661738628186,
+          "v_MAE": 12222679.577153066,
+          "v_MAPE_percent": 37.31029440336335,
+          "heldout_mass": 20.0
+        },
+        {
+          "E_MAE": 0.47612535566698677,
+          "E_RMSE": 0.6199456431344332,
+          "E_MAPE_percent": 38.143651840127184,
+          "v_MAE": 4521262.497342372,
+          "v_MAPE_percent": 16.239274019625412,
+          "heldout_mass": 30.0
+        },
+        {
+          "E_MAE": 0.6777272418133689,
+          "E_RMSE": 0.8418117742859101,
+          "E_MAPE_percent": 41.57551776459797,
+          "v_MAE": 5257632.633006556,
+          "v_MAPE_percent": 19.121303218326897,
+          "heldout_mass": 40.0
+        }
+      ]
+    }
+  },
+  "best_model_name": "RandomForest",
+  "final_test_metrics_seed_2026": {
+    "E_MAE": 0.11609960225197756,
+    "E_RMSE": 0.20122704426378357,
+    "E_MAPE_percent": 6.845636462791474,
+    "v_MAE": 1025089.1774978692,
+    "v_MAPE_percent": 3.2101070366142013
+  },
+  "generalization_gain_vs_source_only": {
+    "RandomForest": {
+      "prev_target_E_MAPE_percent": 188.7317044528321,
+      "new_target_split_E_MAPE_percent": 9.419413776276542,
+      "absolute_drop_E_MAPE_percent": 179.31229067655556,
+      "relative_drop_E_MAPE_percent": 95.00909833693011
+    },
+    "LightGBM": {
+      "prev_target_E_MAPE_percent": 188.76811052550272,
+      "new_target_split_E_MAPE_percent": 10.322889891479774,
+      "absolute_drop_E_MAPE_percent": 178.44522063402295,
+      "relative_drop_E_MAPE_percent": 94.53144396967139
+    },
+    "XGBoost": {
+      "prev_target_E_MAPE_percent": 188.7605433746412,
+      "new_target_split_E_MAPE_percent": 10.915664528507842,
+      "absolute_drop_E_MAPE_percent": 177.84487884613335,
+      "relative_drop_E_MAPE_percent": 94.21718949661899
+    },
+    "CatBoost": {
+      "prev_target_E_MAPE_percent": 188.8020849137012,
+      "new_target_split_E_MAPE_percent": 14.021558306524817,
+      "absolute_drop_E_MAPE_percent": 174.7805266071764,
+      "relative_drop_E_MAPE_percent": 92.57340917981183
+    }
+  },
+  "combined_mass_points_per_condition_min": 3.0,
+  "combined_mass_points_per_condition_median": 4.0,
+  "combined_mass_points_per_condition_max": 4.0,
+  "combined_mass_min": 0.6,
+  "combined_mass_max": 81.55,
+  "combined_E_min": 0.2792,
+  "combined_E_max": 8.9484
+}

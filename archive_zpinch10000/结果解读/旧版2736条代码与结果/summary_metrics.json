@@ -1,0 +1,106 @@
+{
+  "xlsx_path": "/home/user/zpinch_package_20260306/零维表格转换 (2).xlsx",
+  "source_sheet": "对应优化质量",
+  "target_sheet": "丝阵质量20_30_40mgcm",
+  "source_n_samples": 2736,
+  "target_n_samples": 8208,
+  "repaired_source_velocity_rows": 0,
+  "repaired_target_velocity_rows": 0,
+  "source_quality": {
+    "n_samples": 2736,
+    "missing_count": 0,
+    "duplicate_count": 0,
+    "physics_v_backcalc_mae": 1343.5028122362642,
+    "physics_v_backcalc_mape_percent": 0.0010290743605478104
+  },
+  "target_quality": {
+    "n_samples": 8208,
+    "missing_count": 0,
+    "duplicate_count": 0,
+    "physics_v_backcalc_mae": 333.8619435125278,
+    "physics_v_backcalc_mape_percent": 0.0010146270921124296
+  },
+  "source_random_split_summary": {
+    "RandomForest": {
+      "E_MAE": 0.00016052351986952079,
+      "E_RMSE": 0.000251265834670821,
+      "E_MAPE_percent": 0.0031456881732297346,
+      "v_MAE": 2939.7335175800545,
+      "v_MAPE_percent": 0.0019307851865819463
+    },
+    "LightGBM": {
+      "E_MAE": 0.0008091174536706982,
+      "E_RMSE": 0.0015190026383421276,
+      "E_MAPE_percent": 0.015915787210305805,
+      "v_MAE": 10185.113496195643,
+      "v_MAPE_percent": 0.0080521382545697
+    },
+    "XGBoost": {
+      "E_MAE": 0.00038500358352599545,
+      "E_RMSE": 0.0005172308757666639,
+      "E_MAPE_percent": 0.008216017412218035,
+      "v_MAE": 5275.710046990328,
+      "v_MAPE_percent": 0.004271307225547059
+    },
+    "CatBoost": {
+      "E_MAE": 0.0026854840798070296,
+      "E_RMSE": 0.0035580527282433557,
+      "E_MAPE_percent": 0.0568095337643082,
+      "v_MAE": 33260.971431111975,
+      "v_MAPE_percent": 0.028493419082094133
+    }
+  },
+  "target_external_test_summary": {
+    "RandomForest": {
+      "E_MAE": 2.034956714759991,
+      "E_RMSE": 2.701024774561086,
+      "E_MAPE_percent": 188.7317044528321,
+      "v_MAE": 15266981.11317469,
+      "v_MAPE_percent": 56.48220814287983
+    },
+    "LightGBM": {
+      "E_MAE": 2.035346774714753,
+      "E_RMSE": 2.701518742729349,
+      "E_MAPE_percent": 188.76811052550272,
+      "v_MAE": 15269262.670374827,
+      "v_MAPE_percent": 56.490372280065
+    },
+    "XGBoost": {
+      "E_MAE": 2.0352545812223393,
+      "E_RMSE": 2.7013976984050805,
+      "E_MAPE_percent": 188.7605433746412,
+      "v_MAE": 15268753.83871523,
+      "v_MAPE_percent": 56.48864606194214
+    },
+    "CatBoost": {
+      "E_MAE": 2.035500827896439,
+      "E_RMSE": 2.701642737497411,
+      "E_MAPE_percent": 188.8020849137012,
+      "v_MAE": 15270602.073491575,
+      "v_MAPE_percent": 56.497026554872
+    }
+  },
+  "best_external_model": "RandomForest",
+  "available_models": [
+    "CatBoost",
+    "LightGBM",
+    "RandomForest",
+    "XGBoost"
+  ],
+  "feature_names": [
+    "I_MA",
+    "tr_ns",
+    "liner_r_cm",
+    "foam_r_cm",
+    "m_mg_per_cm",
+    "Z_atomic_number",
+    "ratio_foam_liner",
+    "gap_r_cm",
+    "area_diff_cm2",
+    "drive_proxy_I_over_tr",
+    "I_mul_liner",
+    "I_mul_foam",
+    "tr_mul_liner",
+    "tr_mul_foam"
+  ]
+}

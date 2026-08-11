@@ -1,0 +1,80 @@
+{
+  "model_family": "zpinch_velocity_first",
+  "root_dir": "/home/user",
+  "artifact_path": "/home/user/ai_training_outputs/best_velocity_first_model_artifact.pkl",
+  "doc_path": "/home/user/零维计算结果（对应优化质量）_40MA-60MA_150ns-600ns.doc",
+  "prediction_target": "v_cm_per_s",
+  "pipeline": "先预测速度 v，再用 E=v^2*m/(2e16) 反算动能 E",
+  "model_name": "Poly2RidgeVelocityFirst",
+  "n_samples": 2730,
+  "test_seed": 2026,
+  "test_size": 411,
+  "final_test_metrics": {
+    "E_MAE": 0.02923224702787951,
+    "E_RMSE": 0.04301259072196795,
+    "E_MAPE_percent": 0.5806551185293978,
+    "v_MAE": 344891.9946796007,
+    "v_RMSE": 550405.4105691151,
+    "v_MAPE_percent": 0.29014793883968526
+  },
+  "feature_names": [
+    "I_MA",
+    "tr_ns",
+    "liner_r_cm",
+    "foam_r_cm",
+    "m_mg_per_cm",
+    "Z_atomic_number",
+    "ratio_foam_liner",
+    "gap_r_cm",
+    "area_diff_cm2",
+    "drive_proxy_I_over_tr",
+    "I_mul_liner",
+    "I_mul_foam",
+    "tr_mul_liner",
+    "tr_mul_foam"
+  ],
+  "base_feature_names": [
+    "I_MA",
+    "tr_ns",
+    "liner_r_cm",
+    "foam_r_cm",
+    "m_mg_per_cm",
+    "Z_atomic_number"
+  ],
+  "training_ranges": {
+    "I_MA": {
+      "min": 40.0,
+      "max": 60.0
+    },
+    "tr_ns": {
+      "min": 150.0,
+      "max": 600.0
+    },
+    "liner_r_cm": {
+      "min": 4.0,
+      "max": 7.0
+    },
+    "foam_r_cm": {
+      "min": 0.5,
+      "max": 0.8
+    },
+    "m_mg_per_cm": {
+      "min": 0.6,
+      "max": 81.55
+    },
+    "Z_atomic_number": {
+      "min": 13.0,
+      "max": 13.0
+    }
+  },
+  "target_ranges": {
+    "E_MJ_per_cm": {
+      "min": 2.3773,
+      "max": 8.9484
+    },
+    "v_cm_per_s": {
+      "min": -363980000.0,
+      "max": -36154000.0
+    }
+  }
+}

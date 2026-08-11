@@ -1,0 +1,133 @@
+{
+  "quality": {
+    "n_samples": 2730,
+    "missing_count": 0,
+    "duplicate_count": 0,
+    "physics_v_backcalc_mae": 1344.8051096966851,
+    "physics_v_backcalc_mape_percent": 0.0010299189243656239
+  },
+  "best_model": "Poly2Ridge",
+  "final_test_metrics": {
+    "E_MAE": 0.0018843413677074295,
+    "E_RMSE": 0.002227183990450253,
+    "E_MAPE_percent": 0.03744511788614538,
+    "v_MAE": 21897.71873914068,
+    "v_MAPE_percent": 0.018746375685770582
+  },
+  "random_split_summary": {
+    "PowerLaw": {
+      "E_MAE": 0.008344458947437945,
+      "E_RMSE": 0.008714852581214733,
+      "E_MAPE_percent": 0.16455599896694312,
+      "v_MAE": 94615.86719671008,
+      "v_MAPE_percent": 0.08219895731786853
+    },
+    "Poly2Ridge": {
+      "E_MAE": 0.0018811677819467207,
+      "E_RMSE": 0.002217920854824693,
+      "E_MAPE_percent": 0.03765246227853313,
+      "v_MAE": 21626.573526895332,
+      "v_MAPE_percent": 0.01886291821925062
+    },
+    "KNN": {
+      "E_MAE": 0.11262217747338109,
+      "E_RMSE": 0.17555102629806285,
+      "E_MAPE_percent": 2.306659182825596,
+      "v_MAE": 1459130.222254482,
+      "v_MAPE_percent": 1.1495461532189946
+    },
+    "MLP": {
+      "E_MAE": 0.05573233549001019,
+      "E_RMSE": 0.0706124600370087,
+      "E_MAPE_percent": 1.1757497072583298,
+      "v_MAE": 703505.2112228874,
+      "v_MAPE_percent": 0.5879969618330442
+    }
+  },
+  "group_holdout_I_summary": {
+    "PowerLaw": {
+      "E_MAE": 0.009144645236342154,
+      "E_RMSE": 0.009262421921990328,
+      "E_MAPE_percent": 0.18589036887802665,
+      "v_MAE": 106224.06270876278,
+      "v_MAPE_percent": 0.09288955651525778
+    },
+    "Poly2Ridge": {
+      "E_MAE": 0.0018495982647700917,
+      "E_RMSE": 0.002112928495260627,
+      "E_MAPE_percent": 0.03719669881274457,
+      "v_MAE": 20998.669768828087,
+      "v_MAPE_percent": 0.018594222489295598
+    },
+    "KNN": {
+      "E_MAE": 0.17113818321266455,
+      "E_RMSE": 0.1938596324509321,
+      "E_MAPE_percent": 3.593583272956924,
+      "v_MAE": 2177662.8227900914,
+      "v_MAPE_percent": 1.7798541965041896
+    },
+    "MLP": {
+      "E_MAE": 0.07023825888930779,
+      "E_RMSE": 0.08845346047050152,
+      "E_MAPE_percent": 1.4198871304031313,
+      "v_MAE": 839532.7732827922,
+      "v_MAPE_percent": 0.7100550175110469
+    }
+  },
+  "group_holdout_tr_summary": {
+    "PowerLaw": {
+      "E_MAE": 0.009263156795436087,
+      "E_RMSE": 0.009694397343261432,
+      "E_MAPE_percent": 0.18261964337539796,
+      "v_MAE": 106974.0327891142,
+      "v_MAPE_percent": 0.09132672053038167
+    },
+    "Poly2Ridge": {
+      "E_MAE": 0.0018581915744534127,
+      "E_RMSE": 0.0021847568471992616,
+      "E_MAPE_percent": 0.03738246392639768,
+      "v_MAE": 21212.67576487281,
+      "v_MAPE_percent": 0.018687656684113145
+    },
+    "KNN": {
+      "E_MAE": 0.08743281143669805,
+      "E_RMSE": 0.13396371707605317,
+      "E_MAPE_percent": 1.820721698216235,
+      "v_MAE": 1284747.950361093,
+      "v_MAPE_percent": 0.9033842145807874
+    },
+    "MLP": {
+      "E_MAE": 0.060539030879127875,
+      "E_RMSE": 0.07595486895652463,
+      "E_MAPE_percent": 1.2705306304888782,
+      "v_MAE": 797523.6798075526,
+      "v_MAPE_percent": 0.6345598010915212
+    }
+  },
+  "feature_names": [
+    "I_MA",
+    "tr_ns",
+    "liner_r_cm",
+    "foam_r_cm",
+    "m_mg_per_cm",
+    "Z_atomic_number",
+    "ratio_foam_liner",
+    "gap_r_cm",
+    "area_diff_cm2",
+    "drive_proxy_I_over_tr",
+    "I_mul_liner",
+    "I_mul_foam",
+    "tr_mul_liner",
+    "tr_mul_foam"
+  ],
+  "base_feature_names": [
+    "I_MA",
+    "tr_ns",
+    "liner_r_cm",
+    "foam_r_cm",
+    "m_mg_per_cm",
+    "Z_atomic_number"
+  ],
+  "n_samples": 2730,
+  "best_model_artifact_path": "/home/user/ai_training_outputs/best_model_artifact.pkl"
+}

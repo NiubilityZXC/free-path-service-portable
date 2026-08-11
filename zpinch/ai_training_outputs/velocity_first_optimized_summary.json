@@ -1,0 +1,111 @@
+{
+  "model_family": "zpinch_velocity_first_optimized",
+  "root_dir": "/home/user",
+  "artifact_path": "/home/user/ai_training_outputs/best_velocity_first_optimized_model_artifact.pkl",
+  "doc_path": "/home/user/零维计算结果（对应优化质量）_40MA-60MA_150ns-600ns.doc",
+  "prediction_target": "v_cm_per_s",
+  "pipeline": "网页先获得速度 v，再由 E=v^2*m/(2e16) 反算动能；模型内部使用 log(E) 物理约束拟合后输出 v。",
+  "model_name": "VelocityFirstLogEPoly4RidgeOptimized",
+  "n_samples": 2730,
+  "test_seed": 2026,
+  "test_size": 411,
+  "final_test_metrics": {
+    "E_MAE": 0.00010422033271259156,
+    "E_RMSE": 0.00017556683775369432,
+    "E_MAPE_percent": 0.0020306325632471916,
+    "v_MAE": 2314.5635441347704,
+    "v_RMSE": 3954.0171244210665,
+    "v_MAPE_percent": 0.00154536440340211
+  },
+  "multi_seed_test_metrics": {
+    "E_MAE": 0.00010495107781246385,
+    "E_RMSE": 0.00017345993900418666,
+    "E_MAPE_percent": 0.0020418622401709497,
+    "v_MAE": 2231.8405275172245,
+    "v_RMSE": 4131.549532058724,
+    "v_MAPE_percent": 0.0014773377785365978
+  },
+  "multi_seed_test_seeds": [
+    42,
+    2024,
+    2026,
+    7,
+    13,
+    99,
+    123
+  ],
+  "baseline_existing_best_final_metrics": {
+    "E_MAE": 0.0018843413677074295,
+    "E_RMSE": 0.002227183990450253,
+    "E_MAPE_percent": 0.03744511788614538,
+    "v_MAE": 21897.71873914068,
+    "v_MAPE_percent": 0.018746375685770582
+  },
+  "improvement_vs_existing_best_final": {
+    "E_MAE": 18.08036223511086,
+    "E_RMSE": 12.685675831188615,
+    "E_MAPE_percent": 18.44012479848484,
+    "v_MAE": 9.460841459561863,
+    "v_MAPE_percent": 12.13071534746145
+  },
+  "feature_names": [
+    "I_MA",
+    "tr_ns",
+    "liner_r_cm",
+    "foam_r_cm",
+    "m_mg_per_cm",
+    "Z_atomic_number",
+    "ratio_foam_liner",
+    "gap_r_cm",
+    "area_diff_cm2",
+    "drive_proxy_I_over_tr",
+    "I_mul_liner",
+    "I_mul_foam",
+    "tr_mul_liner",
+    "tr_mul_foam"
+  ],
+  "base_feature_names": [
+    "I_MA",
+    "tr_ns",
+    "liner_r_cm",
+    "foam_r_cm",
+    "m_mg_per_cm",
+    "Z_atomic_number"
+  ],
+  "training_ranges": {
+    "I_MA": {
+      "min": 40.0,
+      "max": 60.0
+    },
+    "tr_ns": {
+      "min": 150.0,
+      "max": 600.0
+    },
+    "liner_r_cm": {
+      "min": 4.0,
+      "max": 7.0
+    },
+    "foam_r_cm": {
+      "min": 0.5,
+      "max": 0.8
+    },
+    "m_mg_per_cm": {
+      "min": 0.6,
+      "max": 81.55
+    },
+    "Z_atomic_number": {
+      "min": 13.0,
+      "max": 13.0
+    }
+  },
+  "target_ranges": {
+    "E_MJ_per_cm": {
+      "min": 2.3773,
+      "max": 8.9484
+    },
+    "v_cm_per_s": {
+      "min": -363980000.0,
+      "max": -36154000.0
+    }
+  }
+}

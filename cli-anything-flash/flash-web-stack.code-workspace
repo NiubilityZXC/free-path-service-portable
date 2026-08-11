@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "name": "cli-anything-flash",
+      "path": "."
+    },
+    {
+      "name": "free-path-web",
+      "path": "../Rosseland_opa_new_hetero/equally"
+    },
+    {
+      "name": "pulse-capacitor-web",
+      "path": "../pulse_capacitor_online_eval"
+    },
+    {
+      "name": "zpinch10000",
+      "path": "../zpinch10000"
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "${workspaceFolder:cli-anything-flash}/.venv/bin/python"
+  }
+}

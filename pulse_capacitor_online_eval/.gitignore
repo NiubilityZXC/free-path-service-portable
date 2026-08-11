@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.playwright-cli/
+.env
+.env.*
+service.log
+service.pid
+test_ui_*.png
+node_modules/
+playwright-report/
+test-results/
+output/playwright/test-results/

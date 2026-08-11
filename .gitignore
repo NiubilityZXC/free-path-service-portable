@@ -1,0 +1,33 @@
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Runtime state is recreated by start_all.sh
+runtime/
+*.pid
+*.log
+
+# FLASH is kept in the local portable folder but is not redistributed on GitHub
+FLASH4.8/
+SYMLINKS.txt
+
+# Browser automation scratch files; committed README images live in output/playwright
+.playwright-cli/
+
+# Editor, OS, and patch artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.orig
+*.rej
+
+# Local secrets
+.env
+.env.*
+!.env.example

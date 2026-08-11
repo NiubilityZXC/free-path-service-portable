@@ -1,0 +1,29 @@
+{
+  "root_dir": "/home/user/zpinch10000",
+  "xlsx_path": "/home/user/zpinch10000/零维表格转换 (2).xlsx",
+  "output_dir": "/home/user/zpinch10000/ai_xlsx_all_in_training_outputs_standalone",
+  "source_sheet": "对应优化质量",
+  "target_sheet": "丝阵质量20_30_40mgcm",
+  "n_source_samples": 2736,
+  "n_target_samples": 8208,
+  "n_total_samples": 10944,
+  "available_models": [
+    "PowerLaw",
+    "Poly2Ridge",
+    "KNN",
+    "MLP",
+    "RandomForest",
+    "LightGBM",
+    "XGBoost",
+    "CatBoost"
+  ],
+  "fixed_split_best_model": "LightGBM",
+  "fixed_split_best_metrics": {
+    "model": "LightGBM",
+    "E_MAE": 0.11221769564138342,
+    "E_RMSE": 0.1944055268044649,
+    "E_MAPE_percent": 7.450593061877213,
+    "v_MAE": 1123469.9899418994,
+    "v_MAPE_percent": 3.5292285916994475
+  }
+}

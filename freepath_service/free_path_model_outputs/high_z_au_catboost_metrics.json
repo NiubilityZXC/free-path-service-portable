@@ -1,0 +1,14 @@
+{
+  "artifact_type": "disabled_high_z_wrapper",
+  "created_for": "portable_bundle",
+  "model_path": null,
+  "route_enabled": false,
+  "route_policy": "disabled_single_unified_model",
+  "z_values": [79.0],
+  "standard_prediction_format": "Z rod tep tgama",
+  "standard_training_format": "Z rod tep tgama lnu",
+  "notes": [
+    "High-Z route is intentionally disabled in the current production configuration.",
+    "All predictions use unified_free_path_model.npz; historical high-Z ensembles are excluded from this portable runtime."
+  ]
+}

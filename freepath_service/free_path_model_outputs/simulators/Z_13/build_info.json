@@ -1,0 +1,11 @@
+{
+  "Z": 13,
+  "symbol": "Al",
+  "n": 3,
+  "aw": 26.98,
+  "lbfac": 300.0,
+  "dfree": 1.0,
+  "source_family": "rosseland_low_z_archive",
+  "source_archive": "/home/user/Rosseland_opa_new_hetero/Rosseland_opa_low_Z.zip",
+  "source_label": "Rosseland_opa_low_Z.zip 低 Z 异构单点程序"
+}

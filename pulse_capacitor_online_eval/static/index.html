@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>脉冲电容器状态在线评估</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>脉冲电容器状态在线评估</h1>
+        <p>统一模型对比、专利 GM(1,1)、建模步数搜索与寿命预测</p>
+      </div>
+      <div id="sourcePill" class="source-pill">真实数据：Sandia / OEDI 钽电容高温老化 CSV</div>
+    </header>
+
+    <main class="layout">
+      <section class="controls" aria-label="评估参数">
+        <div class="field">
+          <label for="dataset">数据集</label>
+          <select id="dataset"></select>
+        </div>
+
+        <div class="field">
+          <div class="field-label">参数列</div>
+          <div id="columns" class="check-grid"></div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">单参数失效阈值</div>
+          <div id="parameterRules" class="rules-list"></div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="window">建模窗口</label>
+            <input id="window" type="number" min="4" max="590" value="80" />
+          </div>
+          <div class="field">
+            <div class="field-label">预测方式</div>
+            <div class="segmented">
+              <label><input type="radio" name="predictionMode" value="steps" checked /><span>按步数</span></label>
+              <label><input type="radio" name="predictionMode" value="time" /><span>按时间</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="horizon">预测步数</label>
+            <input id="horizon" type="number" min="20" max="5000" value="1200" />
+          </div>
+          <div class="field">
+            <label for="predictionTime">预测时长</label>
+            <input id="predictionTime" type="number" min="0" step="0.1" placeholder="按时间时填写" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="accuracy">精度阈值 %</label>
+            <input id="accuracy" type="number" min="1" max="99.9" step="0.1" value="90" />
+          </div>
+          <div class="field">
+            <label for="lifeRatio">寿命比阈值 %</label>
+            <input id="lifeRatio" type="number" min="1" max="99.9" step="0.1" value="90" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <div class="field-label">验证方式</div>
+            <div class="segmented">
+              <label><input type="radio" name="validationMode" value="steps" checked /><span>按步数</span></label>
+              <label><input type="radio" name="validationMode" value="time" /><span>按时间</span></label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="validationHorizon">验证步数</label>
+            <input id="validationHorizon" type="number" min="1" max="300" value="20" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="validationError">允许误差 %</label>
+            <input id="validationError" type="number" min="0.1" max="50" step="0.1" value="5" />
+          </div>
+          <div class="field">
+            <label for="validationTime">验证时长</label>
+            <input id="validationTime" type="number" min="0" step="0.1" placeholder="按时间时填写" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="validationStart">回测起始行</label>
+            <input id="validationStart" type="number" min="1" value="1" />
+          </div>
+          <div class="field">
+            <label for="validationEnd">回测结束行</label>
+            <input id="validationEnd" type="number" min="1" placeholder="自动" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="validationStride">滑动间隔</label>
+          <input id="validationStride" type="number" min="1" value="1" />
+        </div>
+
+        <label class="toggle">
+          <input id="smoothing" type="checkbox" />
+          <span>启用移动加权平滑</span>
+        </label>
+
+        <button id="run" type="button">运行评估与验证</button>
+        <button id="download" type="button" class="secondary">导出当前报告 JSON</button>
+      </section>
+
+      <section class="workspace">
+        <div class="workspace-tabs" role="tablist" aria-label="预测方法页面">
+          <button
+            id="deepLearningTab"
+            class="workspace-tab is-active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="deepLearningPage"
+            data-page="deepLearningPage"
+          >全部模型对比预测</button>
+          <button
+            id="patentTab"
+            class="workspace-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="patentPage"
+            data-page="patentPage"
+          >专利 GM(1,1)</button>
+        </div>
+
+        <div id="patentPage" class="workspace-page" role="tabpanel" aria-labelledby="patentTab" hidden>
+        <div class="summary-band">
+          <div>
+            <span class="label">工程状态</span>
+            <strong id="engineeringStatus">待评估</strong>
+          </div>
+          <div>
+            <span class="label">多参数健康度</span>
+            <strong id="lifeRatioOut">--</strong>
+          </div>
+          <div>
+            <span class="label">综合精度</span>
+            <strong id="accuracyOut">--</strong>
+          </div>
+          <div>
+            <span class="label">预测寿命</span>
+            <strong id="lifeOut">--</strong>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="chart" width="1160" height="430" aria-label="参数趋势图"></canvas>
+          <div class="chart-note">实线：实测数据；虚线：模型预测数据。</div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>参数</th>
+                <th>方向</th>
+                <th>第 1 次放电基准</th>
+                <th>临界值</th>
+                <th>a</th>
+                <th>b</th>
+                <th>精度</th>
+                <th>级比</th>
+                <th>剩余步数</th>
+                <th>工程状态</th>
+              </tr>
+            </thead>
+            <tbody id="resultRows"></tbody>
+          </table>
+        </div>
+
+        <section class="validation-panel" aria-label="历史滚动验证">
+          <div class="panel-head">
+            <h2>历史滚动验证</h2>
+            <div id="validationStatus">待验证</div>
+          </div>
+          <div class="validation-kpis">
+            <div>
+              <span class="label">平均 MAPE</span>
+              <strong id="validationMape">--</strong>
+            </div>
+            <div>
+              <span class="label">验证窗口</span>
+              <strong id="validationWindow">--</strong>
+            </div>
+            <div>
+              <span class="label">向后步数</span>
+              <strong id="validationHorizonOut">--</strong>
+            </div>
+            <div>
+              <span class="label">回测范围</span>
+              <strong id="validationRange">--</strong>
+            </div>
+            <div>
+              <span class="label">滑动间隔</span>
+              <strong id="validationStrideOut">--</strong>
+            </div>
+          </div>
+          <canvas id="validationChart" width="1160" height="260" aria-label="历史验证误差图"></canvas>
+          <div class="chart-note">实线：每一轮回测的预测误差。</div>
+          <div class="table-wrap compact-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>参数</th>
+                  <th>验证次数</th>
+                  <th>MAE</th>
+                  <th>RMSE</th>
+                  <th>MAPE</th>
+                  <th>最大误差</th>
+                  <th>最后目标行</th>
+                  <th>最后预测值</th>
+                  <th>最后真实值</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody id="validationRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="notes" aria-label="不确定项">
+          <h2>不确定项</h2>
+          <ul id="uncertainties"></ul>
+        </section>
+
+        <section class="explain-panel" aria-label="当前数据列说明">
+          <h2>当前数据列说明</h2>
+          <div id="columnHelp" class="definition-list"></div>
+        </section>
+
+        <section class="explain-panel" aria-label="输入参数说明">
+          <h2>输入参数说明</h2>
+          <div id="inputHelp" class="definition-list"></div>
+        </section>
+
+        <section class="explain-panel" aria-label="输出参数说明">
+          <h2>输出参数说明</h2>
+          <div id="outputHelp" class="definition-list"></div>
+        </section>
+        </div>
+
+        <div
+          id="alternativePage"
+          class="workspace-page"
+          role="tabpanel"
+          aria-labelledby="alternativeTab"
+          hidden
+        >
+          <div class="summary-band">
+            <div>
+              <span class="label">模型选择状态</span>
+              <strong id="bestModelStatus">待比较</strong>
+            </div>
+            <div>
+              <span class="label">最佳回测精度</span>
+              <strong id="bestModelAccuracy">--</strong>
+            </div>
+            <div>
+              <span class="label">GM 回测 MAPE</span>
+              <strong id="bestModelGmMape">--</strong>
+            </div>
+            <div>
+              <span class="label">MAPE 相对 GM 降低</span>
+              <strong id="bestModelImprovement">--</strong>
+            </div>
+          </div>
+
+          <div class="chart-wrap">
+            <canvas id="alternativeChart" width="1160" height="430" aria-label="最佳模型参数趋势图"></canvas>
+            <div class="chart-note">实线：当前建模窗口实测数据；虚线：回测选出的最佳模型拟合与预测数据。</div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>参数</th>
+                  <th>最优方法</th>
+                  <th>最佳 MAPE</th>
+                  <th>GM MAPE</th>
+                  <th>降低百分点</th>
+                  <th>最后预测值</th>
+                  <th>最后真实值</th>
+                  <th>剩余步数</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody id="bestModelRows"></tbody>
+            </table>
+          </div>
+
+          <section class="validation-panel" aria-label="最佳模型滚动验证">
+            <div class="panel-head">
+              <h2>最佳模型滚动验证误差</h2>
+              <div id="bestValidationStatus">待比较</div>
+            </div>
+            <canvas id="alternativeValidationChart" width="1160" height="260" aria-label="最佳模型历史验证误差图"></canvas>
+            <div class="chart-note">横轴为真实对比行号，纵轴为该参数最佳模型的绝对百分比误差。</div>
+          </section>
+
+          <section class="validation-panel" aria-label="全部候选模型比较">
+            <div class="panel-head">
+              <h2>全部候选模型回测比较</h2>
+              <div id="alternativeCount">--</div>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>参数</th>
+                    <th>候选方法</th>
+                    <th>MAPE</th>
+                    <th>MAE</th>
+                    <th>RMSE</th>
+                    <th>最大误差</th>
+                    <th>验证次数</th>
+                    <th>选择结果</th>
+                  </tr>
+                </thead>
+                <tbody id="candidateModelRows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="explain-panel" aria-label="候选预测方法说明">
+            <h2>候选预测方法说明</h2>
+            <div id="methodHelp" class="definition-list"></div>
+          </section>
+
+          <section class="notes" aria-label="模型选择说明">
+            <h2>模型选择说明</h2>
+            <ul>
+              <li>每个参数单独比较候选方法，并选择滚动回测 MAPE 最低的方法。</li>
+              <li>最佳方法由当前数据、建模窗口、验证步数和回测范围共同决定，修改输入后会重新选择。</li>
+              <li>这里的最佳表示在已有历史数据上误差最低，不代表未来工况变化后仍一定保持最佳。</li>
+            </ul>
+          </section>
+        </div>
+
+        <div
+          id="deepLearningPage"
+          class="workspace-page is-active"
+          role="tabpanel"
+          aria-labelledby="deepLearningTab"
+        >
+          <div id="deepDatasetWarning" class="dataset-warning" hidden>
+            全部模型统一比较报告仅对应实验波形严格特征数据集。
+          </div>
+
+          <div class="summary-band deep-summary-band">
+            <div>
+              <span class="label">验证集选定模型</span>
+              <strong id="deepSelectedModel">--</strong>
+            </div>
+            <div>
+              <span class="label">独立测试表现最高</span>
+              <strong id="deepBestTestModel">--</strong>
+            </div>
+            <div>
+              <span class="label">最佳建模步数</span>
+              <strong id="deepBestLookback">--</strong>
+            </div>
+            <div>
+              <span class="label">最高测试归一化精度</span>
+              <strong id="deepTestAccuracy">--</strong>
+            </div>
+            <div>
+              <span class="label">最低测试 NMAE</span>
+              <strong id="deepTestNmae">--</strong>
+            </div>
+          </div>
+
+          <section class="validation-panel" aria-label="全部模型统一测试设置">
+            <div class="panel-head">
+              <h2>时间顺序独立测试</h2>
+              <div id="deepTestConclusion">--</div>
+            </div>
+            <div class="validation-kpis">
+              <div>
+                <span class="label">最高模型建模步数</span>
+                <strong id="deepLookback">--</strong>
+              </div>
+              <div>
+                <span class="label">向后预测步数</span>
+                <strong id="deepHorizon">--</strong>
+              </div>
+              <div>
+                <span class="label">训练行</span>
+                <strong id="deepTrainRows">--</strong>
+              </div>
+              <div>
+                <span class="label">验证行</span>
+                <strong id="deepValidationRows">--</strong>
+              </div>
+              <div>
+                <span class="label">独立测试行</span>
+                <strong id="deepTestRows">--</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="validation-panel" aria-label="建模步数搜索结果">
+            <div class="panel-head">
+              <h2>建模步数搜索结果</h2>
+              <div id="deepLookbackSearchStatus">--</div>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>候选建模步数</th>
+                    <th>最终最高模型</th>
+                    <th>验证 NMAE</th>
+                    <th>独立测试 NMAE</th>
+                    <th>结果</th>
+                  </tr>
+                </thead>
+                <tbody id="deepLookbackRows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="validation-panel" aria-label="最佳模型寿命预测">
+            <div class="panel-head">
+              <h2>最佳模型寿命预测</h2>
+              <div id="deepLifeStatus">--</div>
+            </div>
+            <div class="life-controls">
+              <label>
+                寿命曲线参数
+                <select id="deepLifeFeatureSelect" aria-label="寿命预测曲线参数"></select>
+              </label>
+              <label>
+                寿命搜索上限（步）
+                <input id="deepLifeLimit" type="number" min="20" max="5000" step="20" value="5000" />
+              </label>
+              <div class="life-basis" id="deepLifeBasis">--</div>
+            </div>
+            <div class="life-kpis">
+              <div>
+                <span class="label">剩余寿命结论</span>
+                <strong id="deepLifeRemaining">--</strong>
+              </div>
+              <div>
+                <span class="label">经验证总寿命下限</span>
+                <strong id="deepLifeTotal">--</strong>
+              </div>
+              <div>
+                <span class="label">多参数健康度</span>
+                <strong id="deepLifeRatio">--</strong>
+              </div>
+              <div>
+                <span class="label">限制寿命参数</span>
+                <strong id="deepLifeLimiter">--</strong>
+              </div>
+              <div>
+                <span class="label">参数信息可信度</span>
+                <strong id="deepLifeConfidence">--</strong>
+              </div>
+              <div>
+                <span class="label">探索性外推</span>
+                <strong id="deepLifeExploratory">--</strong>
+              </div>
+              <div>
+                <span class="label">参考样本实测失效</span>
+                <strong id="deepLifeCalibration">--</strong>
+              </div>
+            </div>
+            <canvas id="deepLifeChart" width="1160" height="360" aria-label="最佳模型寿命预测曲线"></canvas>
+            <div class="chart-note">横轴：相对当前行步数；纵轴：所选参数值。实线为实测，蓝色虚线为经回测验证范围，棕色点线为探索性外推，红色虚线为失效阈值。</div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>参与参数</th>
+                    <th>失效方向</th>
+                    <th>第 1 次放电基准值</th>
+                    <th>稳健当前值</th>
+                    <th>固定失效阈值</th>
+                    <th>参数可靠度</th>
+                    <th>剩余寿命结论</th>
+                    <th>结果</th>
+                  </tr>
+                </thead>
+                <tbody id="deepLifeRows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <div class="chart-wrap">
+            <div class="chart-toolbar">
+              <div>
+                <span class="label">各模型逐参数实测与预测曲线</span>
+                <strong id="deepPredictionTitle">--</strong>
+              </div>
+              <div class="chart-selectors">
+                <label>
+                  查看模型
+                  <select id="deepModelSelect" aria-label="查看预测曲线的模型"></select>
+                </label>
+                <label>
+                  查看参数
+                  <select id="deepFeatureSelect" aria-label="查看预测曲线的严格特征"></select>
+                </label>
+              </div>
+            </div>
+            <canvas id="deepPredictionChart" width="1160" height="360" aria-label="各模型逐参数实测与预测曲线"></canvas>
+            <div class="chart-note">横轴：独立测试目标行号；纵轴：所选参数值。实线为真实值，虚线为所选模型预测值。</div>
+          </div>
+
+          <div class="chart-wrap">
+            <div class="chart-toolbar chart-toolbar-compact">
+              <div>
+              <span class="label">所选模型五个严格特征的预测误差</span>
+                <strong id="deepErrorTitle">--</strong>
+              </div>
+            </div>
+            <canvas id="deepLearningChart" width="1160" height="360" aria-label="深度学习独立测试误差图"></canvas>
+            <div class="chart-note">横轴：独立测试目标行号；纵轴：相对训练范围的绝对误差 (%)。</div>
+          </div>
+
+          <section class="validation-panel" aria-label="全部模型测试最高者逐参数结果">
+            <div class="panel-head">
+              <h2>全部模型测试最高者逐参数结果</h2>
+              <div id="deepFeatureCount">5 个严格特征</div>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>参数</th>
+                    <th>MAE</th>
+                    <th>RMSE</th>
+                    <th>NMAE</th>
+                    <th>sMAPE</th>
+                    <th>普通 MAPE</th>
+                    <th>最后预测值</th>
+                    <th>最后真实值</th>
+                  </tr>
+                </thead>
+                <tbody id="deepFeatureRows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="validation-panel" aria-label="全部候选模型比较">
+            <div class="panel-head">
+              <h2>全部模型独立测试比较（NMAE 越低越准确）</h2>
+              <div id="deepDevice">--</div>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>排名</th>
+                    <th>模型</th>
+                    <th>类别</th>
+                    <th>最佳建模步数</th>
+                    <th>验证 NMAE</th>
+                    <th>测试 NMAE</th>
+                    <th>测试归一化精度</th>
+                    <th>测试 sMAPE</th>
+                    <th>训练秒数</th>
+                    <th>选择结果</th>
+                  </tr>
+                </thead>
+                <tbody id="deepModelRows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="notes" aria-label="全部模型测试说明">
+            <h2>测试说明</h2>
+            <ul id="deepNotes"></ul>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+name: free-path-service-portable
+
+services:
+  capacitor:
+    build: .
+    image: free-path-service-portable:local
+    working_dir: /app
+    command: ["python", "-u", "/app/pulse_capacitor_online_eval/app.py", "--host", "0.0.0.0", "--port", "8890"]
+    volumes:
+      - .:/app
+    ports:
+      - "8890:8890"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "/app/scripts/wait_http.py", "http://127.0.0.1:8890/", "--timeout", "3", "--quiet"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  freepath:
+    build: .
+    image: free-path-service-portable:local
+    working_dir: /app
+    command:
+      - python
+      - -u
+      - /app/freepath_service/free_path_web_app.py
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8790"
+      - --model
+      - /app/freepath_service/free_path_model_outputs/unified_free_path_model.npz
+    environment:
+      FREE_PATH_BUNDLE_ROOT: /app
+      CAPACITOR_APP_DIR: /app/pulse_capacitor_online_eval
+      ZPINCH_ROOT: /app/zpinch
+      FREE_PATH_PYTHON: /usr/local/bin/python
+      FLASH_ROOT: /app/FLASH4.8
+    volumes:
+      - .:/app
+    ports:
+      - "${FREE_PATH_PORT:-8790}:8790"
+    restart: unless-stopped
+    depends_on:
+      capacitor:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "/app/scripts/wait_http.py", "http://127.0.0.1:8790/health", "--timeout", "3", "--quiet"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 45s

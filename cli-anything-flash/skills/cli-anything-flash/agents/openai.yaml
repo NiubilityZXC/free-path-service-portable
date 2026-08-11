@@ -1,0 +1,4 @@
+interface:
+  display_name: "CLI-Anything FLASH"
+  short_description: "Control FLASH simulations by CLI"
+  default_prompt: "优先使用中文。Use $cli-anything-flash to connect to FLASH server 192.168.110.64 or 10.202.51.181, clarify the request, adjust parameters/resolution, run FLASH, inspect errors, and visualize results."

@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.env
+.env.*
+catboost_info/
+*.log
+.pdf_check/
+md2pdf-*.html

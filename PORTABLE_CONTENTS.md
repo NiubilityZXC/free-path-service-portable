@@ -14,6 +14,12 @@
 - `scripts/rebuild_flash_project.py`：根据项目 `setup_call` 重做 setup 和编译
 - `scripts/repair_flash_symlinks.py`：审计/修复旧机器 FLASH 符号链接
 - `scripts/regenerate_manifests.sh`：重建本地链接清单和 GitHub 文件 SHA256
+- `scripts/generate_readme_model_figures.py`：从正式 artifact 与指标报告复算 README 模型图
+
+## 文档图表与页面证据
+
+- `output/playwright/`：8790、8890 与 Z-pinch 当前页面实拍
+- `output/model-docs/`：自由程、Z-pinch、脉冲电容架构效果章节的五张可复现图
 
 ## `freepath_service/`：当前主服务
 

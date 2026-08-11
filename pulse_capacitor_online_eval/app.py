@@ -1096,6 +1096,18 @@ def load_strict_deep_report() -> dict[str, Any]:
     life["baselineDefinition"] = (
         "原始数据第1次放电；放电周期取第1次至第2次之间的首个有效间隔"
     )
+    runtime_baseline_note = (
+        "寿命阈值基准采用原始数据第1次放电；放电周期采用第2行首个有效间隔，"
+        "不再采用历史报告中的最初32次中位数"
+    )
+    notes = [str(note) for note in payload.get("notes", [])]
+    notes = [
+        runtime_baseline_note if "最初 32 次健康阶段中位数" in note else note
+        for note in notes
+    ]
+    if runtime_baseline_note not in notes:
+        notes.append(runtime_baseline_note)
+    payload["notes"] = notes
     calibrated_rules = {}
     for feature, rule in STRICT_CALIBRATED_RULES.items():
         baseline = baselines[feature]

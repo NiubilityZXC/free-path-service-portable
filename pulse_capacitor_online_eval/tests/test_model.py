@@ -333,6 +333,12 @@ class EvaluationTests(unittest.TestCase):
         )
         self.assertEqual(life_forecast["baselineRowsByFeature"]["DischargePeriodSec"], 2)
         self.assertEqual(life_forecast["failureBaselineValues"]["DischargePeriodSec"], 5.968)
+        self.assertFalse(
+            any("最初 32 次健康阶段中位数" in note for note in report["notes"])
+        )
+        self.assertTrue(
+            any("原始数据第1次放电" in note for note in report["notes"])
+        )
         calibration = life_forecast["failureCalibration"]
         self.assertEqual(calibration["observedRows"], 606)
         self.assertEqual(calibration["additionalFailureSteps"], 1500)

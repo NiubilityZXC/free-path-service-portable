@@ -3,7 +3,7 @@ flowchart TD
     B --> C["按 active μ/σ 标准化<br/>Z 维再乘 0.5"]
     C --> D["cKDTree 查询<br/>520 个近邻"]
     D --> E{"元素"}
-    E -->|"Be、Al、默认"| F["三次局部多项式<br/>31 项 + Ridge"]
+    E -->|"Be、Al、默认"| F["三次局部多项式<br/>35 项 + Ridge"]
     E -->|"Au / Z=79"| G["二次局部多项式<br/>15 项 + Ridge"]
     G --> R{"rod < -1.87?"}
     R -->|否| I

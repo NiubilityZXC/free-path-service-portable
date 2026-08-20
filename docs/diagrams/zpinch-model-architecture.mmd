@@ -1,0 +1,10 @@
+flowchart TD
+    A["6 个物理输入"] --> B["8 个物理启发派生项<br/>合计 14 维"]
+    B --> C["StandardScaler"]
+    C --> D["四阶多项式展开<br/>3,059 维"]
+    D --> E["Ridge alpha=1e-4"]
+    F["训练目标 E"] --> G["log(E)"] --> E
+    E --> H["exp → E > 0"]
+    H --> I["v = -sqrt(2e16 E / m)"]
+    I --> J["API 首先返回 v"]
+    J --> K["E = v²m / 2e16<br/>反算并保持物理一致"]

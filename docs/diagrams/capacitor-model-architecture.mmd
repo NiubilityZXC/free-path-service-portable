@@ -1,0 +1,8 @@
+flowchart TD
+    A["606 个 SPBXDS 波形"] --> B["基线 / 峰值 / 过零<br/>反向峰 / 周期提取"]
+    B --> C["606×5 严格特征 CSV"]
+    C --> D["时间顺序划分<br/>424 train / 91 val / 91 test"]
+    D --> E["11 类模型 × 8 个窗口<br/>train + validation 选型"]
+    E --> G["验证集选中量化混合模型<br/>lookback=32, horizon=20"]
+    G --> F["91 点独立 test<br/>仅作最终审计"]
+    G --> H["部署推理、健康度与有限 RUL"]

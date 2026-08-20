@@ -19,7 +19,8 @@
 ## 文档图表与页面证据
 
 - `output/playwright/`：8790、8890 与 Z-pinch 当前页面实拍
-- `output/model-docs/`：自由程、Z-pinch、脉冲电容架构效果章节的五张可复现图
+- `output/model-docs/`：自由程、Z-pinch、脉冲电容的效果图，以及不依赖在线渲染器的五张静态架构/请求链图
+- `docs/diagrams/`：五张静态架构/请求链图对应的 Mermaid 可编辑源文件；README 直接引用生成后的 PNG
 
 ## `freepath_service/`：当前主服务
 

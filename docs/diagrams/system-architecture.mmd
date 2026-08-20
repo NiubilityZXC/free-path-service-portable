@@ -1,0 +1,30 @@
+flowchart LR
+    U["浏览器 / API 调用方"]
+
+    subgraph Main["主服务 · :8790"]
+        P["free_path_web_app.py"]
+        F["不透明度自由程"]
+        X["FLASH 控制台"]
+        E["电容器入口"]
+        Z["套筒速度"]
+        P --> F
+        P --> X
+        P --> E
+        P --> Z
+    end
+
+    subgraph Cap["电容器服务 · :8890"]
+        C["app.py + static/"]
+        CR["严格模型报告"]
+        CD["实验 CSV / 波形特征"]
+        C --> CR
+        C --> CD
+    end
+
+    U -->|HTTP 8790| P
+    U -->|HTTP 8890| C
+    E -->|iframe / API| C
+    F --> UM["unified_free_path_model.npz"]
+    F -.->|可选现场真值| S["SNOP 单点程序"]
+    X --> FT["本地可选 FLASH 项目 / flash.par"]
+    Z --> ZA["velocity-first 模型"]

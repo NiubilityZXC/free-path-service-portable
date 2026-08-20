@@ -7,7 +7,7 @@
 ![Git LFS](https://img.shields.io/badge/Git-LFS-required-F64935?logo=git&logoColor=white)
 ![Status](https://img.shields.io/badge/portable%20smoke-passing-2EA44F)
 
-最后验证：**2026-08-11 · Linux x86-64 · Python 3.13.12**
+最后验证：**2026-08-20 · Linux x86-64 · Python 3.13.12**
 
 ## 先看这两条
 
@@ -39,61 +39,11 @@
 
 ## 系统架构
 
-```mermaid
-flowchart LR
-    U["浏览器 / API 调用方"]
-
-    subgraph Main["主服务 · :8790"]
-        P["free_path_web_app.py"]
-        F["不透明度自由程"]
-        X["FLASH 控制台"]
-        E["电容器入口"]
-        Z["套筒速度"]
-        P --> F
-        P --> X
-        P --> E
-        P --> Z
-    end
-
-    subgraph Cap["电容器服务 · :8890"]
-        C["app.py + static/"]
-        CR["严格模型报告"]
-        CD["实验 CSV / 波形特征"]
-        C --> CR
-        C --> CD
-    end
-
-    U -->|HTTP 8790| P
-    U -->|HTTP 8890| C
-    E -->|iframe / API| C
-    F --> UM["unified_free_path_model.npz"]
-    F -. 可选现场真值 .-> S["SNOP 单点程序"]
-    X --> FT["本地可选 FLASH 项目 / flash.par"]
-    Z --> ZA["velocity-first 模型"]
-```
+![系统架构](output/model-docs/system-architecture.png)
 
 ### 自由程请求链
 
-```mermaid
-flowchart TD
-    A["输入 Z, rod, tep, tgama"] --> B["坐标校验 + 标准表查询"]
-    B --> C{"来源策略"}
-    C -->|只用模型| M["统一局部回归模型"]
-    C -->|混合| H{"精确命中标准表？"}
-    C -->|只用真值| T{"精确命中标准表？"}
-    H -->|是| D["采用表值"]
-    H -->|否| M
-    T -->|是| D
-    T -->|否| ER["返回未命中"]
-    M --> L["预测 log10(lnu)"]
-    L --> R["lnu = 10^log10(lnu)"]
-    D --> R
-    A -. 勾选真实程序 .-> S["执行对应元素单点程序"]
-    S --> Q["真值 + 耗时"]
-    R --> O["来源、范围、误差、耗时"]
-    Q --> O
-    O --> W["网页 / JSON API"]
-```
+![自由程请求链](output/model-docs/freepath-request-flow.png)
 
 ## 30 秒启动
 
@@ -163,22 +113,7 @@ Compose 使用 `restart: unless-stopped`。`.dockerignore` 只缩小镜像构建
 
 8790 当前只加载 <code>freepath_service/free_path_model_outputs/unified_free_path_model.npz</code>。推理实现是 <code>freepath_service/unified_free_path_core.py</code> 中的 UnifiedModel，Web 入口为 <code>free_path_web_app.py</code>，CLI 为 <code>predict_unified_free_path.py</code>。它不是神经网络，而是在每次查询时用近邻样本拟合一个局部多项式。
 
-~~~mermaid
-flowchart LR
-    A["调用方物理量<br/>Z, rho, Te, Trad"] -->|"rho / Te / Trad 由调用方取 log10；Z 不变"| B["模型实际输入<br/>Z, rod, tep, tgama"]
-    B --> C["按 active μ/σ 标准化<br/>Z 维再乘 0.5"]
-    C --> D["cKDTree 查询<br/>520 个近邻"]
-    D --> E{"元素"}
-    E -->|"Be、Al、默认"| F["三次局部多项式<br/>31 项 + Ridge"]
-    E -->|"Au / Z=79"| G["二次局部多项式<br/>15 项 + Ridge"]
-    G --> R{"rod < -1.87?"}
-    R -->|"否"| I
-    R -->|"是"| H["低密度边界扩展<br/>覆盖基础预测"]
-    F --> I["预测 log10(lnu)"]
-    H --> I
-    I --> J["lnu = 10^预测值<br/>单位 cm"]
-    K["高 Z CatBoost wrapper<br/>route_enabled=false<br/>未加载、不参与推理"]
-~~~
+![自由程正式模型架构](output/model-docs/freepath-model-architecture.png)
 
 输入与物理量：
 
@@ -231,18 +166,7 @@ active 发布时标准表快照共 367,603 行：Be 125,000、Al 125,000、Au2 �
 
 当前 Web 固定加载 <code>zpinch/ai_training_outputs/best_velocity_first_optimized_model_artifact.pkl</code>，正式模型名为 VelocityFirstLogEPoly4RidgeOptimized。训练入口是 <code>zpinch/optimize_zpinch_velocity_first.py</code>，特征与物理包装类在 <code>train_zpinch_surrogate.py</code>，独立推理入口是 <code>predict_current.py</code>。
 
-~~~mermaid
-flowchart LR
-    A["6 个物理输入"] --> B["8 个物理启发派生项<br/>合计 14 维"]
-    B --> C["StandardScaler"]
-    C --> D["四阶多项式展开<br/>3,059 维"]
-    D --> E["Ridge alpha=1e-4"]
-    F["训练目标 E"] --> G["log(E)"] --> E
-    E --> H["exp → E > 0"]
-    H --> I["v = -sqrt(2e16 E / m)"]
-    I --> J["API 首先返回 v"]
-    J --> K["E = v²m / 2e16<br/>反算并保持物理一致"]
-~~~
+![Z-pinch 正式模型架构](output/model-docs/zpinch-model-architecture.png)
 
 | 类别 | 特征 |
 |---|---|
@@ -285,16 +209,7 @@ flowchart LR
 
 正式数据来自 <code>pulse_capacitor_online_eval/ceshishuju.zip</code> 中 606 个 OWON SPBXDS 波形文件。每次记录包含 1,520 个 int16 点；采样率由各文件头读取，其中 491 条为 500 MS/s、115 条为 1 GS/s。转换器 <code>tools/convert_owon_spbxds_to_patent_csv.py</code> 按各自采样率生成 606 行 <code>data/raw/ceshishuju_patent_features.csv</code>。这些是 CH1 电流换算的原始采样量，缺少完整探头标定，历史 Voltage* 字段名不能解释成真实端电压或已标定安培。
 
-~~~mermaid
-flowchart LR
-    A["606 个 SPBXDS 波形"] --> B["基线 / 峰值 / 过零<br/>反向峰 / 周期提取"]
-    B --> C["606×5 严格特征 CSV"]
-    C --> D["时间顺序划分<br/>424 train / 91 val / 91 test"]
-    D --> E["11 类模型 × 8 个窗口<br/>train + validation 选型"]
-    E --> G["验证集选中量化混合模型<br/>lookback=32, horizon=20"]
-    G --> F["91 点独立 test<br/>仅作最终审计"]
-    G --> H["部署推理、健康度与有限 RUL"]
-~~~
+![脉冲电容正式模型架构](output/model-docs/capacitor-model-architecture.png)
 
 | 严格特征 | 提取/含义 | 离散水平数 |
 |---|---|---:|
@@ -362,6 +277,8 @@ flowchart LR
 ~~~bash
 .venv/bin/python scripts/generate_readme_model_figures.py
 ~~~
+
+架构和请求链采用仓库内静态 PNG，避免 GitHub 或离线 Markdown 阅读器因 Mermaid 版本差异出现 `Unable to render rich display`；对应可编辑源文件保存在 `docs/diagrams/*.mmd`。
 
 ## 常用训练与推理
 
@@ -442,9 +359,10 @@ free_path_service_portable/
 ├── FLASH4.8/                     # 仅本地可选；Git 忽略，不上传 GitHub
 ├── cli-anything-flash/           # FLASH CLI harness
 ├── Cuba-4.2.2/                   # Cuba 源码、头文件与静态库
+├── docs/diagrams/                # README 静态架构图的可编辑 Mermaid 源
 ├── scripts/                      # 环境、自检、等待、FLASH 修复/重建工具
 ├── output/playwright/            # README 实际页面截图
-├── output/model-docs/            # 从正式报告复算的模型效果图
+├── output/model-docs/            # 模型效果图与静态架构 PNG
 ├── Dockerfile / compose.yaml     # 容器运行
 ├── setup.sh / start_all.sh       # 原生安装与启动
 ├── stop_all.sh / status.sh       # 停止与状态

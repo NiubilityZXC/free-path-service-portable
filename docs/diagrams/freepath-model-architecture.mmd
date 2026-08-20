@@ -1,0 +1,14 @@
+flowchart TD
+    A["调用方物理量<br/>Z, rho, Te, Trad"] -->|"rho / Te / Trad 由调用方取 log10；Z 不变"| B["模型实际输入<br/>Z, rod, tep, tgama"]
+    B --> C["按 active μ/σ 标准化<br/>Z 维再乘 0.5"]
+    C --> D["cKDTree 查询<br/>520 个近邻"]
+    D --> E{"元素"}
+    E -->|"Be、Al、默认"| F["三次局部多项式<br/>31 项 + Ridge"]
+    E -->|"Au / Z=79"| G["二次局部多项式<br/>15 项 + Ridge"]
+    G --> R{"rod < -1.87?"}
+    R -->|否| I
+    R -->|是| H["低密度边界扩展<br/>覆盖基础预测"]
+    F --> I["预测 log10(lnu)"]
+    H --> I
+    I --> J["lnu = 10^预测值<br/>单位 cm"]
+    K["高 Z CatBoost wrapper<br/>route_enabled=false<br/>未加载、不参与推理"]
